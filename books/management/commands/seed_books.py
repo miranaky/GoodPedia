@@ -23,11 +23,11 @@ class Command(BaseCommand):
         seeder = Seed.seeder()
         seeder.add_entity(
             Book, total, {
-                "title":lambda x: seeder.faker.text(max_nb_chars=randint(7,25)),
+                "title": lambda x: seeder.faker.text(max_nb_chars=randint(7, 25)),
                 "year": lambda x: seeder.faker.year(),
                 "rating": lambda x: randint(1, 5),
                 "category": lambda x: choice(categories),
-                "cover_image":lambda x: f"book/{randint(1,22)}.jpg",
+                "cover_image": lambda x: f"images/books/{randint(1,22)}.jpg",
                 "writer": lambda x: choice(writers),
             })
         seeder.execute()

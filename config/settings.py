@@ -55,6 +55,7 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     "django_seed",
+    "storages",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -93,7 +94,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if DEBUG is False:
+if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -150,10 +151,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 ALLOWED_HOSTS = ['*']
 X_FRAME_OPTIONS = '*'
 
 
 AUTH_USER_MODEL = "users.User"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 MEDIA_URL = '/media/'
+
+
+if DEBUG:
+    DEFAULT_FILE_STORAGE = 'config.custom_storages.UploadStorage'
+    STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
+    AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = "django-challenges-miranaky"
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_QUERYSTRING_AUTH = False
+
+    AWS_S3_CUSTOIM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    STATIC_URL = f"https://{AWS_S3_CUSTOIM_DOMAIN}/static/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOIM_DOMAIN}/static/media/"

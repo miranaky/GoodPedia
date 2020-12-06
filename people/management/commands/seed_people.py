@@ -1,7 +1,8 @@
-from random import choice,randint
+from random import choice, randint
 from django.core.management.base import BaseCommand
 from django_seed import Seed
 from people.models import Person
+
 
 class Command(BaseCommand):
 
@@ -16,7 +17,7 @@ class Command(BaseCommand):
         seeder = Seed.seeder()
         seeder.add_entity(Person, total, {
             "name": lambda x: seeder.faker.name(),
-            'photo':lambda x: f"people/{randint(1,40)}.jpg",
+            'photo': lambda x: f"images/people/{randint(1,40)}.jpg",
             "kind": lambda x: choice([Person.KIND_ACTOR, Person.KIND_DIRECTOR, Person.KIND_WRITER])
         })
         seeder.execute()

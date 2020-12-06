@@ -1,4 +1,4 @@
-from random import choice, randint,choices
+from random import choice, randint, choices
 from django.core.management.base import BaseCommand
 from django.contrib.admin.utils import flatten
 from django_seed import Seed
@@ -25,21 +25,20 @@ class Command(BaseCommand):
         seeder = Seed.seeder()
         seeder.add_entity(
             Movie, total, {
-                "title":lambda x: seeder.faker.text(max_nb_chars=randint(7,25)),
+                "title": lambda x: seeder.faker.text(max_nb_chars=randint(7, 25)),
                 "year": lambda x: seeder.faker.year(),
                 "rating": lambda x: randint(1, 5),
-                "cover_image":lambda x: f"movie/{randint(1,42)}.jpg",
+                "cover_image": lambda x: f"images/movies/{randint(1,42)}.jpg",
                 "category": lambda x: choice(categories),
                 "director": lambda x: choice(directors),
             })
         created = seeder.execute()
         cleaned = flatten(list(created.values()))
         for pk in cleaned:
-          movie = Movie.objects.get(pk=pk)
-          cast = choices(cast,k=randint(13,43))
-          for c in cast:
-            magic_number = randint(1,31)
-            if magic_number % 2 == 0:
-              movie.cast.add(c)
+            movie = Movie.objects.get(pk=pk)
+            cast = choices(cast, k=randint(13, 43))
+            for c in cast:
+                magic_number = randint(1, 31)
+                if magic_number % 2 == 0:
+                    movie.cast.add(c)
         self.stdout.write(self.style.SUCCESS(f'{total} movies created!'))
-
