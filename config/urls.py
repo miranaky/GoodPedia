@@ -1,3 +1,4 @@
+import os
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -12,9 +13,10 @@ urlpatterns = [
     path("genres/", include("categories.urls", namespace="genres")),
     path("people/", include("people.urls", namespace="people")),
     path("users/", include("users.urls", namespace="users")),
-    path("admin/", admin.site.urls),
+    path(os.environ.get("DJANGO_ADMIN", "admin/"), admin.site.urls),
 ]
 
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
