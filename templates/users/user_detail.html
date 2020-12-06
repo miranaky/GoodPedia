@@ -6,7 +6,7 @@
 
 
 {% block content %}
-    <div class="flex justify-center">
+    <div class="flex flex-col justify-center">
       <div class="container-md mx-auto w-1/3 flex flex-col border rounded-xl shadow-xl px-8 py-6 mt-4">
         <span class="font-bold">{{user_obj.first_name}}</span>
         <span>{{user_obj.bio}}</span>
@@ -22,14 +22,22 @@
         <a class="text-pink-600 mb-8 font-bold mt-4" href="{% url 'users:update' %}">Edit Profile</a>
       </div>
 
-      <div>
+      <div class="container-md mx-auto">
         {% if user_obj.fav_movie_cat.movies.all.count > 0 %}
-          <div> Latest {{user_obj.fav_movie_cat}} Movie </div>
-          {% include 'partials/movie_boxes.html' with movies=user_obj.fav_movie_cat.movies.all %}
+          <div class="mt-4 font-bold text-blue-800"> {{user_obj.fav_movie_cat}} Movie </div>
+          {% if user_obj.fav_movie_cat.movies.all.count > 5 %}
+            {% include 'partials/movie_boxes.html' with movies=user_obj.pref_movies %}
+          {% else %}
+            {% include 'partials/movie_boxes.html' with movies=user_obj.fav_movie_cat.movies.all %}
+          {% endif %}
         {% endif %}
         {% if user_obj.fav_book_cat.books.all.count > 0 %}
-          <div> Latest {{user_obj.fav_book_cat}} Book </div>
-          {% include 'partials/book_boxes.html' with books=user_obj.fav_book_cat.books.all %}
+        <div class="mt-4 font-bold text-blue-800"> {{user_obj.fav_book_cat}} Book </div>
+          {% if user_obj.fav_book_cat.books.all.count > 5 %}
+            {% include 'partials/book_boxes.html' with books=user_obj.pref_books %}
+          {% else %}
+            {% include 'partials/book_boxes.html' with books=user_obj.fav_book_cat.books.all %}
+          {% endif %}
         {% endif %}
       </div>
 

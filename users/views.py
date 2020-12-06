@@ -4,8 +4,11 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
+from django.db.models import Count
 from users.forms import LoginForm, SignUpForm
 from users.models import User
+from movies.models import Movie
+from books.models import Book
 
 
 def logout_view(request):
@@ -50,6 +53,14 @@ class UserProfileView(DetailView):
     model = User
     context_object_name = "user_obj"
 
+    def def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["pref_movies"] = Movie.objects.filter(
+            category=self.fav_movie_cat).order_by('-year')[:5]
+        cpmtext["pref_books"] = Book.objects.filter(
+            category=self.fav_book_cat).order_by('-year')[:5]
+        return context
+
 
 class UpdateProfileView(UpdateView):
 
@@ -67,7 +78,6 @@ class UpdateProfileView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-
 
 
 class UpdatePasswordView(PasswordChangeView):
