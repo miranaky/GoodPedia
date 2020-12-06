@@ -26,7 +26,7 @@ SECRET_KEY = 'b#s*_o(3t3ai_k(c5po@h7a=nj5#vjkd3u7ckhnx@)mi=8fn67'
 DEBUG = bool(os.environ.get("DEBUG"))
 
 ALLOWED_HOSTS = [
-    'django-challenges.eba-pqgxf3e6.ap-northeast-2.elasticbeanstalk.com']
+    'django-challenges.eba-pqgxf3e6.ap-northeast-2.elasticbeanstalk.com', ]
 
 
 # Application definition
