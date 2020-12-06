@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load is_movie_on_favs %}
+
+{% block page_title %}
+{{movie.title}}
+{% endblock page_title %}
+
+{% block content %}
+  <div class="flex justify-center">
+
+    <div class="container-md mx-auto w-2/5 flex flex-col border rounded-xl shadow-xl px-8 py-6 mt-4">
+      <img src="{{movie.cover_image.url}}" class="w-4/5 rounded place-self-center	" alt="">
+      <div class="flex  justify-between item-center ">
+        <div class="text-2xl font-bold my-2">{{movie.title}}</div>
+        {% if user.is_authenticated %}
+          {% is_movie_on_favs movie as on_favs_boolean %}
+          {% if on_favs_boolean %}
+            <div class="my-2"><a href="{% url 'favs:toggle-favs' movie.pk %}?type=movie&action=remove"> <i class="fas fa-heart text-red-500 mr-1 rounded-xl py-2 px-4 border-red-400 border-2"></i></a></div>
+          {% else %}
+            <div class="my-2"><a href="{% url 'favs:toggle-favs' movie.pk %}?type=movie&action=add"> <i class="fas fa-heart text-gray-500 mr-1 rounded-xl py-2 px-4 border-gray-400 border-2"></i></a></div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <span class="text-sm mr-1" >{{movie.year}} {{movie.category}}</span>
+      <span class="text-xs mr-1"> Rating <i class="fas fa-star text-red-500 text-xs mr-1"></i>{{movie.total_rating}}</span>
+
+      <div>
+        <div class="font-medium border-t my-2">
+          <span class="font-bold">Directed by </span>
+          <a class='text-blue-700 font-bold' href="{% url 'people:person' movie.director.pk %}">{{movie.director}}</a></div>
+        <div>
+          <span class="font-bold">Casting</span>
+          <div class="flex flex-col">
+            {% for cast in movie.cast.all %}
+            <span class="font-medium"><a class='text-blue-600' href="{% url 'people:person' cast.pk %}">{{cast}}</a></span> 
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {% include 'partials/comments.html' with model=movie form=form type="movie" %}
+      {% include 'mixins/category.html' with model=movie %}
+
+      {% if user.is_authenticated %}
+      <div class="bg-pink-500 hover:bg-pink-700 text-white font-bold rounded w-full mt-4 py-2 px-4 flex justify-center ">
+        <a class="mx-auto " href="{% url 'movies:update' movie.pk %}">Edit Movie</a>
+      </div>
+      {% endif %}
+
+
+    </div>
+
+
+  </div>
+
+{% endblock content %}

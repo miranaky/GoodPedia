@@ -1,0 +1,10 @@
+<div class="shadow-xl  rounded-xl px-4 py-4">
+  <div class="text-lg font-bold mb-8 ">Books</div>
+  <div class="flex item-center flex-wrap">
+  {% for book in books %}
+  <div class="w-1/5">
+    {% include "mixins/book.html" with book=book %}
+  </div>
+  {% endfor %}
+  </div>
+</div>

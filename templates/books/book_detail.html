@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load is_book_on_favs %}
+
+{% block page_title %}
+{{book.title}}
+{% endblock page_title %}
+
+{% block content %}
+  <div class="flex justify-center">
+
+    <div class="container-md mx-auto w-2/5 flex flex-col border rounded-xl shadow-xl px-8 py-6 mt-4">
+      <img src="{{book.cover_image.url}}" class="w-4/5 rounded place-self-center" alt="">
+      <div class="flex  justify-between item-center ">
+        <div class="text-2xl font-bold my-2">{{book.title}}</div>
+          {% if user.is_authenticated %}
+            {% is_book_on_favs book as on_favs_boolean %}
+            {% if on_favs_boolean %}
+              <div class="my-2"><a href="{% url 'favs:toggle-favs' book.pk %}?type=book&action=remove"> <i class="fas fa-heart text-red-500 mr-1 rounded-xl py-2 px-4 border-red-400 border-2"></i></a></div>
+            {% else %}
+              <div class="my-2"><a href="{% url 'favs:toggle-favs' book.pk %}?type=book&action=add"> <i class="fas fa-heart text-gray-500 mr-1 rounded-xl py-2 px-4 border-gray-400 border-2"></i></a></div>
+            {% endif %}
+          {% endif %}
+      </div>
+      <span class="text-sm mr-1" >{{book.year}} {{book.category}}</span>
+      <span class="text-xs mr-1"> Rating <i class="fas fa-star text-red-500 text-xs mr-1"></i>{{book.total_rating}}</span>
+      <span class="font-bold">Written by : <a class='text-blue-700 font-bold' href="{% url 'people:person' book.writer.pk %}">{{book.writer}}</a> </span>
+      
+      {% include 'partials/comments.html' with model=book type="book" %}
+      {% include 'mixins/category.html' with model=book %}
+
+      {% if user.is_authenticated %}
+        <div class="bg-pink-500 hover:bg-pink-700 text-white font-bold rounded w-full mt-4 py-2 px-4 flex justify-center ">
+          <a class="mx-auto " href="{% url 'books:update' book.pk %}">Edit Book</a>
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endblock content %}

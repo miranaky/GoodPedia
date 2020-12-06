@@ -1,0 +1,12 @@
+<div class=" mb-6 px-2">
+  <a href="{% url 'movies:movie' movie.pk %}">
+    <div class="flex flex-col">
+      <div class="h-64 bg-cover bg-center rounded-lg mb-2 " style="background-image: url({{movie.cover_image.url}});"></div>
+      <span class="text-lg font-bold">{{movie.title}}</span>
+      <span class="text-sm mr-1" >{{movie.year}}</span>
+      <span class="text-xs mr-1"> Rating <i class="fas fa-star text-red-500 text-xs mr-1"></i>{{movie.total_rating}}</span>
+    </div>
+
+  </a>
+</div>
+

@@ -1,0 +1,41 @@
+<div>
+  <div class="font-bold mt-4">
+    <span>Reveiws</span>
+    <span class="text-gray-500 text-sm">({{model.total_reviews}})</span>
+  </div>
+
+  {% for review in model.reviews.all %}
+  <div class="border-b my-2 mx-2">
+    <div class="flex item-center">
+      <div>          
+        <span class="font-bold text-sm ">{{review.created_by.first_name}}</span>
+        <span class="text-sm"><i class="fas fa-star text-red-500 text-xs mr-1"></i>{{review.rating}}</span>
+      </div>
+      <span class="text-sm text-gray-500 ml-4">{{review.created_at|date:"F Y"}}</span>
+    </div>
+    <div class="ml-2 mb-2 ">
+      <span class="text-sm ">{{review.text}}</span>
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="font-bold mt-4">
+    {% if user.is_authenticated %}
+    <span>Write a review</span>
+    <form action="{% url 'reviews:create' model.pk %}?type={{type}}" method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-2 ">
+            <label class="block text-gray-700 font-bold text-sm" for="{{field.auto_id}}">{{field.label}}</label>
+            <div class="appearance-none border rounded w-full  text-gray-700 leading-loose focus:outline-none">
+              {{field}}
+            </div>
+        </div>
+      {% endfor %}
+      <button class="block mx-auto font-bold text-blue-500 mb-4">Submit</button>
+    </form>
+
+    {% endif %}
+  </div>
+
+</div>

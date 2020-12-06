@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+  All of  {{category}}
+{% endblock page_title %}
+
+
+{% block content %}
+
+<div class="container mx-auto pt-4">
+  {% include 'mixins/categories_list.html' %}
+  <span class="text-xl font-bold mb-8 mt-6">{{category}}</span>
+
+  {% if category.movies.all.count > 0 %}
+    {% include 'partials/movie_boxes.html' with movies=category.movies.all %}
+  {% endif %}
+  {% if category.books.all.count > 0 %}
+    {% include 'partials/book_boxes.html' with books=category.books.all %}
+  {% endif %}
+</div>
+{% endblock content %}

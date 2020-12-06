@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+ {{person.name}}
+{% endblock page_title %}
+
+{% block content %}
+  <div class="flex justify-center">
+
+    <div class="container-md mx-auto w-2/5 flex flex-col border rounded-xl shadow-xl px-8 py-6 mt-4">
+      <img src="{{person.photo.url}}" class="w-full rounded place-self-center	" alt="">
+      <div class="mx-auto block">
+        <div class="text-2xl font-bold mt-2">{{person.name}}</div>
+        <div>Kind : {{person.kind}}</div>
+      </div>
+
+      <div class="block">
+        {% if person.kind == 'director' and person.movies.count > 0 %}
+          <div class="grid justify-items-center mt-4 pt-1 font-bold border-t border-gray-500">{{person.name}}'s Works.({{person.movies.count}})</div>
+          {% for movie in person.movies.all %}
+          <div class="w-full mt-4">
+            {% include "mixins/movie.html" with movie=movie %}
+          </div>
+          {% endfor %}
+        {% elif person.kind == "writer"  and person.books.count > 0 %}
+          <div class="grid justify-items-center mt-4 pt-1 font-bold border-t border-gray-500">{{person.name}}'s Works.({{person.books.count}})</div>
+          {% for book in person.books.all %}
+          <div class="w-full mt-4">
+            {% include "mixins/book.html" with book=book %}
+          </div>
+          {% endfor %}
+        {% elif person.kind == "actor"  and person.c_movies.count > 0 %}
+          <div class="grid justify-items-center mt-4 pt-1 font-bold border-t border-gray-500">{{person.name}}'s Works.({{person.c_movies.count}})</div>
+          {% for movie in person.c_movies.all %}
+          <div class="w-full mt-4">
+            {% include "mixins/movie.html" with movie=movie %}
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      {% if user.is_authenticated %}
+      <div class="bg-pink-500 hover:bg-pink-700 text-white font-bold rounded w-full mt-4 py-2 px-4 flex justify-center ">
+        <a class="mx-auto " href="{% url 'people:update' person.pk %}">Edit Person</a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+{% endblock content %}

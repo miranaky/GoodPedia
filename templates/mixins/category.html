@@ -1,0 +1,26 @@
+
+{% if model.category.movies.all.count > 0 %}
+  <div>
+    <span class="font-bold ">More Like This Movies({{model.category.movies.all.count}})</span>
+  </div>
+  <div>
+    {% for movie in model.category.movies.all %}
+    <div class="w-full mt-4">
+      {% include "mixins/movie.html" with movie=movie %}
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% if model.category.books.all.count > 0 %}
+  <div>
+    <span class="font-bold ">More Like This Books({{model.category.books.all.count}})</span>
+  </div>
+  <div>
+    {% for book in model.category.books.all %}
+    <div class="w-full mt-4">
+      {% include "mixins/book.html" with book=book %}
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
